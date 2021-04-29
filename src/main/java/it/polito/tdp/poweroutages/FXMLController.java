@@ -15,6 +15,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class FXMLController {
+	
+	Model m;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -39,6 +41,19 @@ public class FXMLController {
     @FXML
     void doRun(ActionEvent event) {
     	txtResult.clear();
+    	Nerc n= cmbNerc.getValue();
+    	String h = txtHours.getText();
+    	String y = txtYears.getText();
+    	
+    	try {
+    	int hh = Integer.parseInt(h);
+    	int yy = Integer.parseInt(y);
+    	txtResult.setText(m.getOutagesList(n, yy, hh));
+    	}
+    	catch (NumberFormatException ne) {
+    		txtResult.setText("Devi inserire un numero");
+    		return;
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -52,7 +67,9 @@ public class FXMLController {
         txtResult.setStyle("-fx-font-family: monospace");
     }
     
-    public void setModel(Model model) {
-    	this.model = model;
+    public void setModel(Model m) {
+    	this.m = m;
+    	for(Nerc n : m.getNercList())
+    		cmbNerc.getItems().add(n);
     }
 }
